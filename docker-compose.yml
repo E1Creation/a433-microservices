@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+ #container pertama yg ingin dibuat
+ mongodb:
+ #mengambil image mongo:3
+  image: mongo:3
+  #memberi nama container
+  container_name: item-db
+  #agar selalu restart saat terhenti atau gagal
+  restart: always
+  # menghubungkan ke volume app:db dan disimpan ke /data/db
+  volumes: 
+   - app-db:/data/db
+  #memapping port dari container ke host
+  ports:
+   - 27017:27017
+ #container kedua yg ingin dibuat
+ app:
+  #mengambil image item-app:v1
+  image: item-app:v1 #atau kurniawans/item-app:v1
+  #memberi nama container
+  container_name: item-app
+  #agar selalu restart saat terhenti atau gagal
+  restart: always
+  #agar app ini tidak jalan sebelum mongodb jalan, karena bergantung ke mongodb
+  depends_on:
+  - mongodb
+  #memapping port dari container ke host
+  ports:
+   - 80:8080
+#membuat volume app-db
+volumes:
+ app-db:
+
+ 
